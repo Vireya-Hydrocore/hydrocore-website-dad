@@ -1,0 +1,83 @@
+:root {
+  /* Core colors */
+  --color-bg: #f9f9f9;
+  --color-text: #333;
+  --color-primary: #4caf50;
+  --color-border: #ddd;
+
+  /* Sidebar */
+  --sidebar-bg: var(--color-bg);
+  --sidebar-text: #00796b;
+  --sidebar-hover: #b2dfdb;
+  --sidebar-logout: #00796b;
+  --sidebar-logout-hover: #b2dfdb;
+
+  /* Tasks */
+  --task-bg: #ffffff;
+  --task-text: #333;
+  --task-hover: #f0f0f0;
+  --task-button-hover: #00cc00;
+
+  /* Modals */
+  --modal-bg: #ffffff;
+  --modal-button-bg: #00ff00;
+
+  /* Chatbot */
+  --chatbot-user-bg: #00695c;
+  --chatbot-bot-bg: #aaaaaa;
+  --chatbot-text: #fff;
+
+  /* Dashboard */
+  --tab-active: #0e6b65;
+  --tab-inactive: #555;
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+  --card-hover: #f0f0f0;
+  --card-radius: 15px;
+
+  --line-color: #cfd8e3;
+  --primary-color: #007bff;
+  --card-text-secondary: rgba(0, 0, 0, 0.7);
+  --card-text-destaque: #fff;
+  --card-text-destaque-secondary: rgba(255, 255, 255, 0.9);
+
+  --input: #fff;
+}
+
+.dark-mode {
+  --color-bg: #121212;
+  --color-text: #e0e0e0;
+  --color-border: #555;
+  --color-primary: #4caf50;
+  --sidebar-bg: var(--color-bg);
+  --sidebar-text: #80cbc4;
+  --sidebar-hover: #004d40;
+  --sidebar-logout: #80cbc4;
+  --sidebar-logout-hover: #004d40;
+
+  --task-bg: #2c2f36;
+  --task-text: #e0e0e0;
+  --task-hover: #444444;
+  --task-button-hover: #00b300;
+
+  --modal-bg: #333;
+  --modal-button-bg: #00cc00;
+
+  --chatbot-bot-bg: #333;
+
+  --tab-active: #80cbc4;
+  --tab-inactive: #bbb;
+  --card-bg: #121212;
+  --card-shadow: rgba(255, 255, 255, 0.1);
+  --card-hover: #444444;
+
+  --line-color: #444;
+
+  --card-hover-shadow: 0px 6px 12px rgba(0, 0, 0, 0.7);
+  --primary-color: #0d6efd;
+  --card-text-secondary: #ccc;
+  --card-text-destaque: #fff;
+  --card-text-destaque-secondary: rgba(255, 255, 255, 0.9);
+
+  --input: #888;
+}

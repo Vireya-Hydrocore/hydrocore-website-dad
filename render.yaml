@@ -1,0 +1,24 @@
+version: 1
+services:
+  - type: web
+    name: vireya-site
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run preview
+    plan: free
+    branch: main
+    autoDeploy: true
+    rootDir: vireyaWeb
+    envVars:
+      - key: VITE_API_URL
+        value: ""
+      - key: VITE_PBI_GRAPH
+        value: ""
+      - key: VITE_CHATBOT_API_URL
+        value: ""
+      - key: VITE_CHATBOT_API_PASSWORD
+        value: ""
+      - key: VITE_MONGOLOGIN_API_URL
+        value: ""
+      - key: VITE_TOKEN_LOGIN_EXTERNO
+        value: ""

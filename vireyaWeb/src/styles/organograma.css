@@ -1,0 +1,137 @@
+/* Container geral */
+.organogramaContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Segoe UI", sans-serif;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background-color: var(--color-bg);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Cada nó (nível hierárquico) */
+.node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+/* Subordinados (filhos) */
+.children {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  margin-top: 40px;
+  gap: 60px;
+  position: relative;
+}
+
+/* Linha vertical conectando supervisor aos subordinados */
+.children::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 2px;
+  height: 30px;
+  background-color: var(--line-color);
+  transform: translateX(-50%);
+}
+
+/* Linha horizontal conectando os subordinados entre si */
+.children::after {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: var(--line-color);
+  z-index: 0;
+}
+
+/* Linha vertical para cada filho */
+.children > .node::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 2px;
+  height: 30px;
+  background-color: var(--line-color);
+}
+
+/* Card base */
+.card {
+  position: relative;
+  background: var(--card-bg);
+  border: 2px solid var(--primary-color);
+  border-radius: 10px;
+  padding: 14px 20px;
+  min-width: 180px;
+  text-align: center;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s, color 0.3s;
+  z-index: 1;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+/* Card de destaque (nível mais alto) */
+.card.destaque {
+  background: var(--primary-color);
+  color: var(--card-text-destaque);
+  border-color: transparent;
+}
+
+/* Texto dentro do card */
+.cardText .name {
+  display: block;
+  font-weight: 700;
+  color: inherit;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.cardText .position {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--card-text-secondary);
+}
+
+.card.destaque .position {
+  color: var(--card-text-destaque-secondary);
+}
+
+/* Animação de fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Responsividade */
+@media (max-width: 800px) {
+  .children {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .card {
+    min-width: 140px;
+    padding: 12px 16px;
+  }
+}
