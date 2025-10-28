@@ -1,0 +1,121 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 30px;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  height: 100px;
+  width: 100%;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info img {
+  margin-right: 15px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-name {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.user-role {
+  margin: 0;
+  font-size: 14px;
+  color: #aaa;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 550;
+  margin: 0;
+}
+
+.date {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.user-avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.upload-image-label {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4px;
+  border-radius: 100%;
+  cursor: pointer;
+  display: none;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.user-avatar-container:hover .upload-image-label {
+  display: block;
+}
+
+.upload-image-label:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+@media (max-width: 800px) {
+  .header {
+    padding: 50px 25px;
+    height: 75px;
+  }
+
+  .user-info img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+
+  .user-name {
+    font-size: 16px;
+  }
+
+  .user-role {
+    font-size: 12px;
+  }
+
+  .title {
+    margin-top: 20px;
+    font-size: 24px;
+  }
+
+  .date {
+    font-size: 13px;
+  }
+
+  .search-bar input {
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    width: 150px;
+    height: 35px;
+  }
+}

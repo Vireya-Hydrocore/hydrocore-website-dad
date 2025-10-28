@@ -1,0 +1,27 @@
+/* dashboard-page.css */
+.dashboard-page {
+  padding: 24px;
+  background-color: var(--color-bg); /* Cor de fundo da página */
+  display: flex;
+  height: 83vh;
+}
+
+.iframe-container {
+  width: 100%;
+  background-color: var(--iframe-background);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px var(--card-shadow);
+  margin-right: 25px;
+}
+
+iframe {
+  height: 525px;
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .dashboard-page {
+    flex-direction: column;
+  }
+}
