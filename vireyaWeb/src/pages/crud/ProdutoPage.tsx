@@ -30,7 +30,7 @@ const ProdutoPage: React.FC = () => {
       type: "dropdown",
       options: unidades,
     },
-  };
+  } as const;
 
   return (
     <div>

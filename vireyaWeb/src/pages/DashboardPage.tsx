@@ -5,11 +5,7 @@ import type { Aviso } from "../types/Aviso";
 function DashBoardPage() {
   const powerBILink = import.meta.env.VITE_PBI_GRAPH;
 
-  const {
-    ultimosAvisos,
-    loadingUltimos,
-    errorUltimos,
-  } = useAvisosDashBoard();
+  const { ultimosAvisos, loadingUltimos, errorUltimos } = useAvisosDashBoard();
 
   if (loadingUltimos) return <div>Carregando...</div>;
   if (errorUltimos) return <div>Erro ao carregar avisos</div>;
@@ -17,10 +13,12 @@ function DashBoardPage() {
   // Agrupar avisos por data
   const avisosPorData: Record<string, Aviso[]> = {};
   ultimosAvisos?.forEach((aviso) => {
-    if (!avisosPorData[aviso.dataOcorrencia]) {
-      avisosPorData[aviso.dataOcorrencia] = [];
+    const dataKey = aviso.dataOcorrencia.toISOString().split("T")[0];
+
+    if (!avisosPorData[dataKey]) {
+      avisosPorData[dataKey] = [];
     }
-    avisosPorData[aviso.dataOcorrencia].push(aviso);
+    avisosPorData[dataKey].push(aviso);
   });
 
   return (
@@ -45,7 +43,8 @@ function DashBoardPage() {
                 {avisos.map((aviso) => (
                   <div key={aviso.id} className="activity-item">
                     <p>
-                      {aviso.descricao} - Prioridade {aviso.prioridade} - Status {aviso.status}
+                      {aviso.descricao} - Prioridade {aviso.prioridade} - Status{" "}
+                      {aviso.status}
                     </p>
                   </div>
                 ))}
