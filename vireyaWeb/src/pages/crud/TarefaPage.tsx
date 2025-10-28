@@ -3,7 +3,6 @@ import { type Tarefa } from "../../types/Tarefa"; // Defina o tipo Tarefa
 import CrudPage from "./CrudPage"; // Componente genérico de CRUD
 import useTarefas from "../../hooks/crud/useTarefas";
 // import { usePrioridades } from "../../hooks/usePrioridades"; // Hook para obter as prioridades
-import { CircularProgress, Button } from "@mui/material";
 
 const TarefaPage: React.FC = () => {
   const { tarefas, loading, error, refetch, criar, atualizar, deletar } = useTarefas(); // Hook para tarefas
@@ -30,7 +29,7 @@ const TarefaPage: React.FC = () => {
     //   options: prioridades, // Supondo que `prioridades` seja um array de objetos com id e nome
     // },
     status: { label: "Status", type: "string" },
-  };
+  } as const;
 
   return (
     <div>

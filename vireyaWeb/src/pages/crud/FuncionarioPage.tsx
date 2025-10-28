@@ -1,12 +1,12 @@
 import useFuncionarios from "../../hooks/crud/useFuncionarios";
-import { useCargos } from "../../hooks/crud/useCargoDropdown";
+import { useCargoDropdown } from "../../hooks/crud/useCargoDropdown";
 import CrudPage from "./CrudPage";
 import type { Funcionario } from "../../types/Funcionario";
 
 const FuncionarioPage: React.FC = () => {
   const { funcionarios, loading, error, criar, atualizar, deletar, refetch } =
     useFuncionarios();
-  const { cargos, loading: cargosLoading, error: cargosError } = useCargos(); // Carregando cargos
+  const { cargos } = useCargoDropdown();
 
   return (
     <CrudPage<Funcionario>
@@ -52,16 +52,6 @@ const FuncionarioPage: React.FC = () => {
         senha: "Senha",
         dataAdmissao: "Admissão",
         dataNascimento: "Nascimento",
-      }}
-      titleField="nome"
-      initialForm={{
-        nome: "",
-        email: "",
-        idCargo: "",
-        idEta: 1,
-        senha: "",
-        dataAdmissao: "",
-        dataNascimento: "",
       }}
     />
   );

@@ -31,7 +31,7 @@ const AvisoPage: React.FC = () => {
     //   // options: prioridades, // Supondo que `prioridades` seja um array de objetos com id e nome
     // },
     status: { label: "Status", type: "string" },
-  };
+  } as const;
 
   return (
     <div>

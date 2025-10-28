@@ -26,11 +26,11 @@ type CrudPageProps<T extends { id: number }> = {
   items: T[];
   loading: boolean;
   error?: unknown;
-  criar: (data: Partial<T>) => Promise<void>;
-  atualizar: (id: number, data: Partial<T>) => Promise<void>;
+  criar: (data: Omit<T, "id">) => Promise<void>;
+  atualizar: (id: number, data: Omit<T, "id">) => Promise<void>;
   deletar?: (id: number) => Promise<void>;
   refetch?: () => Promise<void>;
-  modal: Record<keyof T, FieldSchema>;
+  modal: Partial<Record<keyof T, FieldSchema>>;
   displayFields?: Record<string, string>;
   titleField?: keyof T;
 };
@@ -69,9 +69,9 @@ export default function CrudPage<T extends { id: number }>(
     item: editingItem,
     onSave: async (formData) => {
       if (editingItem) {
-        await atualizar(editingItem.id, formData);
+        await atualizar(editingItem.id, formData as Omit<T, "id">);
       } else {
-        await criar(formData);
+        await criar(formData as Omit<T, "id">);
       }
       closeModal();
       if (refetch) await refetch();
@@ -169,7 +169,7 @@ export default function CrudPage<T extends { id: number }>(
                       onChange={(e) => handleChange(fieldKey, e.target.value)}
                       error={!!formErrors[fieldKey]}
                     >
-                      {options?.map((option) => (
+                      {options?.map((option: { id: number; nome: string }) => (
                         <MenuItem key={option.id} value={option.id}>
                           {option.nome}
                         </MenuItem>

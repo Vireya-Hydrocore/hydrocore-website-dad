@@ -14,8 +14,8 @@ const LoginExterno = () => {
   const funcionarioId = params.get("funcionarioId");
   const token = params.get("token");
 
-  const [nome, setNome] = useState<string | null>(null);
-  const [cargo, setCargo] = useState<string | null>(null);
+const [, setNome] = useState<string | null>(null);
+const [, setCargo] = useState<string | null>(null);
 
   useEffect(() => {
     console.log("Parâmetros recebidos:", { funcionarioId, token });
