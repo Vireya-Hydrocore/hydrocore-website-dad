@@ -1,4 +1,4 @@
-import "../styles/DashboardPage.css";
+import "../styles/dashBoardPage.css";
 import useAvisosDashBoard from "../hooks/useAvisosDashBoard";
 import type { Aviso } from "../types/Aviso";
 
