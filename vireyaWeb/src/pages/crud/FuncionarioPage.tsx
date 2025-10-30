@@ -1,12 +1,31 @@
-import useFuncionarios from "../../hooks/crud/useFuncionarios";
-import { useCargoDropdown } from "../../hooks/crud/useCargoDropdown";
 import CrudPage from "./CrudPage";
+import { useCrudEntity } from "../../hooks/crud/useCrudEntity";
 import type { Funcionario } from "../../types/Funcionario";
+import { CircularProgress, Button } from "@mui/material";
+import FuncionarioService from "../../services/FuncionarioService";
+import { listarCargo } from "../../services/CargoService";
+import { useDropdown } from "../../hooks/crud/useDropDown";
 
 const FuncionarioPage: React.FC = () => {
-  const { funcionarios, loading, error, criar, atualizar, deletar, refetch } =
-    useFuncionarios();
-  const { cargos } = useCargoDropdown();
+  const {
+    items: funcionarios,
+    criar,
+    atualizar,
+    deletar,
+    loading,
+    refetch,
+    error,
+  } = useCrudEntity<Funcionario>(FuncionarioService);
+  const cargos = useDropdown(listarCargo);
+
+  if (loading) return <CircularProgress />;
+  if (error)
+    return (
+      <div>
+        Erro ao carregar dados.
+        <Button onClick={refetch}>Tentar novamente</Button>
+      </div>
+    );
 
   return (
     <CrudPage<Funcionario>
@@ -30,7 +49,7 @@ const FuncionarioPage: React.FC = () => {
         idCargo: {
           label: "Cargo",
           type: "dropdown",
-          options: cargos, // Passando os cargos como opções
+          options: cargos,
         },
         senha: {
           label: "Senha",

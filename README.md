@@ -1,7 +1,6 @@
 # Vireya Hydrocore - Site
 
-
-Esse projeto foi desenvolvido por alunos do Instituto J&F, do curso Germinare Tech. Vireya é um projeto  que tem a proposta de simplificar e ajudar no gerenciamento de ETAs (Empresas de Tratamento de Água) e diminuir erros humanos. Trazendo soluções a problemas reais dentro de ETAs desde superdosagem ou subdosagem até o gerenciamento de estoque e geração de relatórios exigidos por lei e periódicos.
+Esse projeto foi desenvolvido por alunos do Instituto J&F, do curso Germinare Tech. Vireya é um projeto que tem a proposta de simplificar e ajudar no gerenciamento de ETAs (Empresas de Tratamento de Água) e diminuir erros humanos. Trazendo soluções a problemas reais dentro de ETAs desde superdosagem ou subdosagem até o gerenciamento de estoque e geração de relatórios exigidos por lei e periódicos.
 
 O site é usado por **gerentes** da ETA, ondem eles podem executar algumas tarefas como:
 
@@ -10,77 +9,66 @@ O site é usado por **gerentes** da ETA, ondem eles podem executar algumas taref
 - Organograma da ETA
 - ChatBot IA personalizada com as informações da ETA
 
-
-
-
-
-
-
-### Como configurar o projeto
+## Como configurar o projeto
 
 Configurações necessárias para inicializar o projeto:
 
 - **Node.js** (versão >= 14.0.0) e **npm**
-- **Git** 
+- **Git**
 
 #### Para inicializar o projeto
 
 ```bash
-# Clone o projeto
 $ git clone https://github.com/seu-usuario/seu-repositorio.git
 
-# Navegue até o diretório do projeto
 $ cd hydrocore-website-dad/vireyaWeb
 
-# Instale as dependências
 $ npm install
 
-# Inicie o projeto em modo de desenvolvimento
 $ npm run dev
-Ao iniciar, o projeto estará rodando em
-http://localhost:5173
+```
 
-Variáveis de ambiente
-Se o projeto utilizar variáveis de ambiente, crie um arquivo .env na raiz do projeto com as variáveis necessárias. Exemplo:
+#### Ao iniciar, o projeto estará rodando em http://localhost:5173
 
-env
-Copy code
-VITE_API_URL=http://api.seuapp.com
-VITE_SECRET_KEY=chave-secreta-aqui
-Lembre-se de reiniciar o servidor após adicionar ou modificar variáveis no arquivo .env.
+### Variáveis de ambiente
 
-Dependências do projeto
-Este projeto usa as seguintes dependências principais:
+*Importante*: crie um arquivo .env na raiz do projeto com as variáveis necessárias.
 
-Vite: Para o build e desenvolvimento rápido.
+```env
+VITE_API_URL=
+VITE_PBI_GRAPH=
+VITE_CHATBOT_API_URL=
+VITE_CHATBOT_API_PASSWORD=
+VITE_MONGOLOGIN_API_URL=
+VITE_TOKEN_LOGIN_EXTERNO=
+VITE_AUTH_TOKEN=
+```
 
-React: Biblioteca para construir interfaces de usuário.
+## Dependências do projeto
 
-React Router: Para navegação dentro do app.
+- **@emotion/react**: Biblioteca para estilos CSS-in-JS, usada junto com MUI.
+- **@emotion/styled**: Extensão do Emotion.
+- **@mui/material**: Biblioteca de componentes React prontos.
+- **@mui/icons-material**: Conjunto de ícones do Material Design.
+- **axios**: Biblioteca para realizar requisições HTTP.
+- **react**
+- **react-dom**
+- **react-hook-form**: Biblioteca para manipulação de formulários em React de forma simples, performática e com validação.
+- **react-icons**: Biblioteca de ícones.
+- **react-router-dom**: Biblioteca para gerenciar rotas e navegação.
 
-Axios: Para realizar requisições HTTP.
+### Linguagens e tecnologias Utilizadas
 
-dotenv: Para gerenciar variáveis de ambiente.
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" alt="react logo" />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vite/vite-original.svg" height="40" alt="vite logo" />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="javascript logo" />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="40" alt="html5 logo" />
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="40" alt="css3 logo" />
 
-Você pode adicionar outras dependências conforme necessário para o seu projeto.
+## Documentação
+- [Pages](./docs/pages.md)
+- [Componentes](./docs/components.md)
+- [Services](./docs/services.md)
+- [Hooks](./docs/hooks.md)
 
-
-
-
-
-
-
-
-
-
-
-
-<h2 align="left">✏️ Linguagens utilizadas</h2>
-
-
-<h2 align="left">✏️ Linguagens e Tecnologias Utilizadas</h2> <div align="left"> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" height="40" alt="react logo" /> <img width="12" /> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vite/vite-original.svg" height="40" alt="vite logo" /> <img width="12" /> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" height="40" alt="javascript logo" /> <img width="12" /> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" height="40" alt="html5 logo" /> <img width="12" /> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg" height="40" alt="css3 logo" /> </div>
-Como rodar o projeto em produção
-Se você deseja gerar o build para produção, siga os passos abaixo:
-
-
-Este projeto está sob a licença <a href="https://opensource.org/licenses/MIT">MIT</a> – veja o arquivo LICENSE para detalhes.</p>
+Este projeto está sob a licença <a href="https://opensource.org/licenses/MIT">MIT</a>. Veja o arquivo LICENSE para detalhes.

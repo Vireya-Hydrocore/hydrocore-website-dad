@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Button,
   Modal,
@@ -16,7 +16,11 @@ import {
   TableRow,
   Paper,
   Typography,
+  Fade,
+  Backdrop,
+  Fab,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import { useCrudForm } from "../../hooks/crud/useCrudForm";
 import { type FieldSchema } from "../../types/FieldSchema";
 import "../../styles/crudPage.css";
@@ -32,47 +36,40 @@ type CrudPageProps<T extends { id: number }> = {
   refetch?: () => Promise<void>;
   modal: Partial<Record<keyof T, FieldSchema>>;
   displayFields?: Record<string, string>;
-  titleField?: keyof T;
 };
 
-export default function CrudPage<T extends { id: number }>(
-  props: CrudPageProps<T>
-) {
-  const {
-    title,
-    items,
-    loading,
-    error,
-    criar,
-    atualizar,
-    deletar,
-    refetch,
-    modal,
-    displayFields,
-  } = props;
-
+export default function CrudPage<T extends { id: number }>({
+  title,
+  items,
+  loading,
+  error,
+  criar,
+  atualizar,
+  deletar,
+  refetch,
+  modal,
+  displayFields,
+}: CrudPageProps<T>) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<T | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const openModal = (item?: T) => {
+  const openModal = useCallback((item?: T) => {
     setEditingItem(item ?? null);
     setModalOpen(true);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setModalOpen(false);
     setEditingItem(null);
-  };
+  }, []);
 
   const { form, formErrors, handleSubmit, handleChange } = useCrudForm({
     item: editingItem,
     onSave: async (formData) => {
-      if (editingItem) {
+      if (editingItem)
         await atualizar(editingItem.id, formData as Omit<T, "id">);
-      } else {
-        await criar(formData as Omit<T, "id">);
-      }
+      else await criar(formData as Omit<T, "id">);
       closeModal();
       if (refetch) await refetch();
     },
@@ -80,25 +77,36 @@ export default function CrudPage<T extends { id: number }>(
   });
 
   const filteredItems = useMemo(() => {
+    const query = searchQuery.toLowerCase();
     return items.filter((item) =>
       Object.values(item).some((value) =>
-        String(value).toLowerCase().includes(searchQuery.toLowerCase())
+        String(value).toLowerCase().includes(query)
       )
     );
   }, [items, searchQuery]);
 
-  if (loading) return <CircularProgress color="inherit" />;
+  if (loading)
+    return (
+      <div className="crud-loader">
+        <CircularProgress size={60} color="primary" />
+      </div>
+    );
+
   if (error)
-    return <Typography color="error">Erro ao carregar dados.</Typography>;
+    return (
+      <Typography align="center" color="error" variant="h6" sx={{ mt: 4 }}>
+        Erro ao carregar dados.
+      </Typography>
+    );
 
   return (
     <div className="crud-page">
       <TextField
         className="search-field"
         label="Pesquisar"
+        variant="outlined"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        variant="outlined"
       />
 
       <TableContainer component={Paper} className="crud-table">
@@ -108,116 +116,145 @@ export default function CrudPage<T extends { id: number }>(
               {Object.keys(displayFields || {}).map((key) => (
                 <TableCell key={key}>{displayFields?.[key] || key}</TableCell>
               ))}
-              <TableCell>Ações</TableCell>
+              <TableCell align="center">Ações</TableCell>
             </TableRow>
           </TableHead>
+
           <TableBody>
-            {filteredItems.map((item) => (
-              <TableRow key={item.id}>
-                {Object.keys(displayFields || {}).map((key) => (
-                  <TableCell key={key}>
-                    {String(item[key as keyof T])}
-                  </TableCell>
-                ))}
-                <TableCell>
-                  <Button
-                    onClick={() => openModal(item)}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    className="action-button"
-                  >
-                    Editar
-                  </Button>
-                  {deletar && (
+            {filteredItems.length > 0 ? (
+              filteredItems.map((item) => (
+                <TableRow key={item.id} hover>
+                  {Object.keys(displayFields || {}).map((key) => (
+                    <TableCell key={key}>
+                      {String(item[key as keyof T])}
+                    </TableCell>
+                  ))}
+                  <TableCell align="center">
                     <Button
-                      onClick={() => deletar(item.id)}
+                      onClick={() => openModal(item)}
                       variant="outlined"
-                      color="secondary"
+                      color="primary"
                       size="small"
                       className="action-button"
                     >
-                      Deletar
+                      Editar
                     </Button>
-                  )}
+                    {deletar && (
+                      <Button
+                        onClick={() => deletar(item.id)}
+                        variant="outlined"
+                        color="error"
+                        size="small"
+                        className="action-button"
+                      >
+                        Deletar
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={Object.keys(displayFields || {}).length + 1}
+                  align="center"
+                >
+                  Nenhum registro encontrado.
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Botão flutuante */}
-      <Button className="add-button" onClick={() => openModal()}>
-        +
-      </Button>
+      <Fab
+        color="primary"
+        aria-label="add"
+        className="add-button"
+        onClick={() => openModal()}
+      >
+        <AddIcon />
+      </Fab>
 
-      <Modal open={modalOpen} onClose={closeModal}>
-        <div className="crud-modal">
-          <h2>{editingItem ? `Editar ${title}` : `Novo ${title}`}</h2>
-          <form onSubmit={handleSubmit}>
-            {Object.entries(modal).map(([key, { label, type, options }]) => {
-              const fieldKey = key as keyof T;
-              const value = form[fieldKey] ?? "";
+      <Modal
+        open={modalOpen}
+        onClose={closeModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{ timeout: 300 }}
+      >
+        <Fade in={modalOpen}>
+          <div className="crud-modal">
+            <Typography variant="h6" gutterBottom>
+              {editingItem ? `Editar ${title}` : `Novo ${title}`}
+            </Typography>
 
-              if (type === "dropdown") {
+            <form onSubmit={handleSubmit}>
+              {Object.entries(modal).map(([key, { label, type, options }]) => {
+                const fieldKey = key as keyof T;
+                const value = form[fieldKey] ?? "";
+
+                if (type === "dropdown") {
+                  return (
+                    <FormControl fullWidth margin="normal" key={key}>
+                      <InputLabel>{label}</InputLabel>
+                      <Select
+                        value={String(value)}
+                        onChange={(e) => handleChange(fieldKey, e.target.value)}
+                        error={!!formErrors[fieldKey]}
+                      >
+                        {options?.map(
+                          (option: { id: number; nome: string }) => (
+                            <MenuItem key={option.id} value={option.id}>
+                              {option.nome}
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                      {formErrors[fieldKey] && (
+                        <Typography color="error">
+                          {formErrors[fieldKey]}
+                        </Typography>
+                      )}
+                    </FormControl>
+                  );
+                }
+
                 return (
-                  <FormControl fullWidth margin="normal" key={key}>
-                    <InputLabel>{label}</InputLabel>
-                    <Select
-                      value={String(value)}
-                      onChange={(e) => handleChange(fieldKey, e.target.value)}
-                      error={!!formErrors[fieldKey]}
-                    >
-                      {options?.map((option: { id: number; nome: string }) => (
-                        <MenuItem key={option.id} value={option.id}>
-                          {option.nome}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {formErrors[fieldKey] && (
-                      <Typography color="error">
-                        {formErrors[fieldKey]}
-                      </Typography>
-                    )}
-                  </FormControl>
+                  <TextField
+                    key={key}
+                    label={label}
+                    type={
+                      type === "date"
+                        ? "date"
+                        : type === "number"
+                        ? "number"
+                        : "text"
+                    }
+                    value={String(value)}
+                    onChange={(e) => handleChange(fieldKey, e.target.value)}
+                    fullWidth
+                    margin="normal"
+                    InputLabelProps={
+                      type === "date" ? { shrink: true } : undefined
+                    }
+                    error={!!formErrors[fieldKey]}
+                    helperText={formErrors[fieldKey]}
+                  />
                 );
-              }
+              })}
 
-              return (
-                <TextField
-                  key={key}
-                  label={label}
-                  type={
-                    type === "date"
-                      ? "date"
-                      : type === "number"
-                      ? "number"
-                      : "text"
-                  }
-                  value={String(value)}
-                  onChange={(e) => handleChange(fieldKey, e.target.value)}
-                  fullWidth
-                  margin="normal"
-                  InputLabelProps={
-                    type === "date" ? { shrink: true } : undefined
-                  }
-                  error={!!formErrors[fieldKey]}
-                  helperText={formErrors[fieldKey]}
-                />
-              );
-            })}
-
-            <div className="modal-buttons">
-              <Button type="submit" variant="contained" color="primary">
-                Salvar
-              </Button>
-              <Button onClick={closeModal} variant="outlined">
-                Cancelar
-              </Button>
-            </div>
-          </form>
-        </div>
+              <div className="modal-buttons">
+                <Button type="submit" variant="contained" color="primary">
+                  Salvar
+                </Button>
+                <Button onClick={closeModal} variant="outlined">
+                  Cancelar
+                </Button>
+              </div>
+            </form>
+          </div>
+        </Fade>
       </Modal>
     </div>
   );

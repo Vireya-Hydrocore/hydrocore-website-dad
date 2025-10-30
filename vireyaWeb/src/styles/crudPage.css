@@ -1,26 +1,36 @@
-/* Container principal */
 .crud-page {
-  padding: 16px;
+  padding: 24px;
   background-color: var(--color-bg);
   color: var(--color-text);
   min-height: 100vh;
   box-sizing: border-box;
+  position: relative;
 }
 
-/* Campo de pesquisa */
-.crud-page .search-field {
-  width: 100%;
+.crud-title {
   margin-bottom: 16px;
+  font-weight: 600;
 }
 
-/* Tabela */
+.crud-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+}
+
+.search-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
 .crud-table {
   width: 100%;
   border-collapse: collapse;
   background-color: var(--card-bg);
   border-radius: var(--card-radius);
   overflow: hidden;
-  box-shadow: 0 2px 5px var(--card-shadow);
+  box-shadow: 0 2px 8px var(--card-shadow);
 }
 
 .crud-table th,
@@ -31,102 +41,60 @@
 
 .crud-table th {
   background-color: var(--card-bg);
-  text-align: left;
+  font-weight: 600;
 }
 
 .crud-table tr:hover {
   background-color: var(--card-hover);
 }
 
-/* Botões da tabela */
-.crud-table .action-button {
+.action-button {
   margin-right: 8px;
+  text-transform: none;
 }
 
-/* Botão flutuante de adicionar */
 .add-button {
-  position: fixed;
+  position: fixed !important;
   bottom: 24px;
   right: 24px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  font-size: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-primary);
-  color: var(--card-text-destaque);
-  border: none;
-  cursor: pointer;
-  transition: background 0.3s;
+  z-index: 1200;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
 }
 
 .add-button:hover {
-  background-color: var(--modal-button-bg);
+  transform: scale(1.1);
 }
 
-/* Modal */
 .crud-modal {
-  position: fixed;
-  top: 10%;
+  position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   width: 90%;
   max-width: 500px;
   background-color: var(--modal-bg);
   color: var(--color-text);
   padding: 24px;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
   overflow-y: auto;
-  max-height: 80%;
+  max-height: 80vh;
 }
 
-.crud-modal h2 {
-  margin-top: 0;
-}
-
-/* Inputs dentro do modal */
-.crud-modal input,
-.crud-modal select {
-  width: 100%;
-  margin: 8px 0;
-  padding: 10px;
-  border: 1px solid var(--color-border);
-  border-radius: 6px;
-  background-color: var(--task-bg);
-  color: var(--task-text);
-}
-
-.crud-modal input:focus,
-.crud-modal select:focus {
-  outline: none;
-  border-color: var(--primary-color);
-}
-
-/* Botões do modal */
-.crud-modal .modal-buttons {
-  margin-top: 16px;
+.modal-buttons {
   display: flex;
   justify-content: flex-end;
+  margin-top: 20px;
 }
 
-.crud-modal .modal-buttons button {
-  margin-left: 8px;
+.modal-buttons button {
+  margin-left: 10px;
 }
 
-
-/* Responsividade */
 @media (max-width: 600px) {
   .crud-modal {
-    top: 5%;
+    width: 95%;
     padding: 16px;
-  }
-
-  .add-button {
-    width: 50px;
-    height: 50px;
-    font-size: 24px;
   }
 }

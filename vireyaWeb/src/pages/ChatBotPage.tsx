@@ -1,6 +1,8 @@
+import "../styles/chatbot.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import "../styles/chatbot.css";
+
+// api_key 
 
 function ChatBotPage() {
   const [messages, setMessages] = useState([
@@ -13,6 +15,8 @@ function ChatBotPage() {
   const senha = import.meta.env.VITE_CHATBOT_API_PASSWORD;
   const API_URL = import.meta.env.VITE_CHATBOT_API_URL;
 
+  const email = localStorage.getItem("email");
+
   const handleSend = async () => {
     if (!input.trim() || isSending) return;
 
@@ -22,10 +26,16 @@ function ChatBotPage() {
     setIsSending(true);
 
     try {
+      const urlWithEmail = email
+        ? `${API_URL}?email=${encodeURIComponent(email)}`
+        : API_URL;
+
       const response = await axios.post(
-        API_URL,
+        urlWithEmail,
         { user_message: userMessage },
-        { headers: { Authorization: `Bearer ${senha}` } }
+        {
+          headers: { Authorization: `Bearer ${senha}` },
+        }
       );
       const botReply = response.data.resposta || "Resposta não disponível.";
       setMessages((prev) => [...prev, { sender: "bot", text: botReply }]);
@@ -40,7 +50,6 @@ function ChatBotPage() {
     }
   };
 
-  // Scroll automático para a última mensagem
   useEffect(() => {
     const container = chatContainerRef.current;
     if (container) {
