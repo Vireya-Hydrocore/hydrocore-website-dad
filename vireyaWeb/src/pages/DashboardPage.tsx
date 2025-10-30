@@ -1,25 +1,25 @@
 import "../styles/dashBoardPage.css";
-import useAvisosDashBoard from "../hooks/useAvisosDashBoard";
+import { CircularProgress } from "@mui/material";
+import useAvisos from "../hooks/useAvisosDashBoard";
 import type { Aviso } from "../types/Aviso";
 
-function DashBoardPage() {
+const DashBoardPage: React.FC = () => {
   const powerBILink = import.meta.env.VITE_PBI_GRAPH;
+  const { ultimosAvisos, loading, error } = useAvisos();
 
-  const { ultimosAvisos, loadingUltimos, errorUltimos } = useAvisosDashBoard();
+  if (loading) return <CircularProgress />;
+  if (error) return <p>{error}</p>;
+  if (!ultimosAvisos?.length) return <p>Nenhuma atividade recente.</p>;
 
-  if (loadingUltimos) return <div>Carregando...</div>;
-  if (errorUltimos) return <div>Erro ao carregar avisos</div>;
-
-  // Agrupar avisos por data
-  const avisosPorData: Record<string, Aviso[]> = {};
-  ultimosAvisos?.forEach((aviso) => {
-    const dataKey = aviso.dataOcorrencia.toISOString().split("T")[0];
-
-    if (!avisosPorData[dataKey]) {
-      avisosPorData[dataKey] = [];
-    }
-    avisosPorData[dataKey].push(aviso);
-  });
+  const avisosPorData = ultimosAvisos.reduce<Record<string, Aviso[]>>(
+    (acc, aviso) => {
+      const dataKey = aviso.dataOcorrencia?.split("T")[0];
+      if (!acc[dataKey]) acc[dataKey] = [];
+      acc[dataKey].push(aviso);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="dashboard-page">
@@ -36,27 +36,24 @@ function DashBoardPage() {
       <div className="activities-card">
         <h3>Atividades Recentes</h3>
         <div className="activities-list">
-          {ultimosAvisos && ultimosAvisos.length > 0 ? (
-            Object.entries(avisosPorData).map(([data, avisos]) => (
-              <div key={data} className="activity-date-group">
-                <h4>{data}</h4>
-                {avisos.map((aviso) => (
-                  <div key={aviso.id} className="activity-item">
-                    <p>
-                      {aviso.descricao} - Prioridade {aviso.prioridade} - Status{" "}
-                      {aviso.status}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            ))
-          ) : (
-            <p>Nenhuma atividade recente.</p>
-          )}
+          {Object.entries(avisosPorData).map(([data, avisos]) => (
+            <div key={data} className="activity-date-group">
+              <h4>{data}</h4>
+              {avisos.map((aviso) => (
+                <div key={aviso.id} className="activity-item">
+                  <p>
+                    {aviso.descricao} - Prioridade{" "}
+                    <strong>{aviso.prioridade}</strong> - Status{" "}
+                    <strong>{aviso.status}</strong>
+                  </p>
+                </div>
+              ))}
+            </div>
+          ))}
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default DashBoardPage;

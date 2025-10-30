@@ -1,23 +1,28 @@
-import { type Produto } from "../../types/Produto";
 import CrudPage from "./CrudPage";
-import useProdutos from "../../hooks/crud/useProdutos";
-import { useUnidadeMedidaDropdown } from "../../hooks/crud/useUnidadeMedidaDropdown";
+import { useDropdown } from "../../hooks/crud/useDropDown";
+import { type Produto } from "../../types/Produto";
 import { CircularProgress, Button } from "@mui/material";
+import { listarUnidadesMedida } from "../../services/UnidadeMedidaService";
+import { useCrudEntity } from "../../hooks/crud/useCrudEntity";
+import ProdutoService from "../../services/ProdutoService";
 
 const ProdutoPage: React.FC = () => {
-  const { produtos, loading, error, refetch, criar, atualizar, deletar } =
-    useProdutos();
   const {
-    unidades,
-    loading: loadingUnidades,
-    error: errorUnidades,
-  } = useUnidadeMedidaDropdown();
+    items: produtos,
+    criar,
+    atualizar,
+    deletar,
+    loading,
+    refetch,
+    error,
+  } = useCrudEntity<Produto>(ProdutoService);
+  const unidades = useDropdown(listarUnidadesMedida);
 
-  if (loading || loadingUnidades) return <CircularProgress />;
-  if (error || errorUnidades)
+  if (loading) return <CircularProgress />;
+  if (error)
     return (
       <div>
-        Erro ao carregar dados.{" "}
+        Erro ao carregar dados.
         <Button onClick={refetch}>Tentar novamente</Button>
       </div>
     );

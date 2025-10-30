@@ -1,11 +1,7 @@
-import { Link } from "react-router-dom";
-
 const AcessoNegadoPage = () => {
   return (
     <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <h1 style={{ color: "red" }}>Acesso Negado</h1>
-      <p>Você não tem permissão para acessar esta página.</p>
-      <Link to="/">Voltar à página inicial</Link>
+      <p style={{ color: "red", fontSize: 22, marginTop: 140 }}>Você não tem permissão para acessar esta página. Apenas gerentes via login da landing page podem acessar.</p>
     </div>
   );
 };

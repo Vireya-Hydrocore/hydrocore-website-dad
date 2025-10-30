@@ -1,33 +1,42 @@
-import React from "react";
-import { type Tarefa } from "../../types/Tarefa"; // Defina o tipo Tarefa
-import CrudPage from "./CrudPage"; // Componente genérico de CRUD
-import useTarefas from "../../hooks/crud/useTarefas";
-// import { usePrioridades } from "../../hooks/usePrioridades"; // Hook para obter as prioridades
+import CrudPage from "./CrudPage";
+import { useDropdown } from "../../hooks/crud/useDropDown";
+import { listarPrioridades } from "../../services/PrioridadeService";
+import { type Tarefa } from "../../types/Tarefa";
+import { CircularProgress, Button } from "@mui/material";
+import TarefaService from "../../services/TarefaService";
+import { useCrudEntity } from "../../hooks/crud/useCrudEntity";
 
 const TarefaPage: React.FC = () => {
-  const { tarefas, loading, error, refetch, criar, atualizar, deletar } = useTarefas(); // Hook para tarefas
-  // const { prioridades, loading: loadingPrioridades, error: errorPrioridades } = usePrioridades();
+  const {
+    items: tarefas,
+    criar,
+    atualizar,
+    deletar,
+    loading,
+    refetch,
+    error,
+  } = useCrudEntity<Tarefa>(TarefaService);
+  const prioridades = useDropdown(listarPrioridades);
 
-  // if (loading || loadingPrioridades) return <CircularProgress />;
-  // if (error || errorPrioridades) {
-  //   return (
-  //     <div>
-  //       Erro ao carregar dados.
-  //       <Button onClick={refetch}>Tentar novamente</Button>
-  //     </div>
-  //   );
-  // }
+  if (loading) return <CircularProgress />;
+  if (error) {
+    return (
+      <div>
+        Erro ao carregar dados.
+        <Button onClick={refetch}>Tentar novamente</Button>
+      </div>
+    );
+  }
 
-  // Configuração do modal para Tarefa
   const modalConfig = {
     descricao: { label: "Descrição", type: "string" },
     dataCriacao: { label: "Data de Criação", type: "date" },
     dataConclusao: { label: "Data de Conclusão", type: "date" },
-    // prioridade: {
-    //   label: "Prioridade",
-    //   type: "dropdown",
-    //   options: prioridades, // Supondo que `prioridades` seja um array de objetos com id e nome
-    // },
+    prioridade: {
+      label: "Prioridade",
+      type: "dropdown",
+      options: prioridades,
+    },
     status: { label: "Status", type: "string" },
   } as const;
 
@@ -50,7 +59,6 @@ const TarefaPage: React.FC = () => {
           prioridade: "Prioridade",
           status: "Status",
         }}
-        titleField="descricao"
       />
     </div>
   );

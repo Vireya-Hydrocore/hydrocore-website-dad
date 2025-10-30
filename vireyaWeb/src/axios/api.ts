@@ -5,8 +5,7 @@ const api = axios.create({
 });
 
 const getAuthToken = () => {
-  return "teste233"
-  // localStorage.getItem('authToken') || null;
+  return import.meta.env.VITE_AUTH_TOKEN
 };
 
 const getUserEmail = () => {

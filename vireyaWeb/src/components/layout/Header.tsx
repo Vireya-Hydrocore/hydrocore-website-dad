@@ -3,19 +3,17 @@ import { useLocation } from "react-router-dom";
 import ThemeToggle from "../Tema";
 import "../../styles/header.css";
 import { FaEdit } from "react-icons/fa";
-import useGetUserData from "../../hooks/useUsuario";
+import { useAuth } from "../../pages/context/AuthContext";
 
 const Header = () => {
-  const [currentDate, setCurrentDate] = useState<string>("");
-  const [userImage, setUserImage] = useState<string | null>(null);
+  const { nome, cargo } = useAuth();
   const location = useLocation();
 
-  const email = "joao.santos@email.com";
+  const [currentDate, setCurrentDate] = useState<string>("");
+  const [userImage, setUserImage] = useState<string | null>(null);
+  const [imageError, setImageError] = useState(false);
 
-  // Usar hook que busca nome e cargo pelo email
-  const { nome, cargo, loading } = useGetUserData(email);
-
-  const pageTitles: { [key: string]: string } = useMemo(
+  const pageTitles: Record<string, string> = useMemo(
     () => ({
       "/dashboard": "Dashboard",
       "/organograma": "Organograma",
@@ -24,35 +22,43 @@ const Header = () => {
       "/avisos": "Avisos Diários",
       "/funcionarios": "Funcionários",
       "/chatBot": "ChatBot",
+      "/acesso-negado": "Acesso Negado",
     }),
     []
   );
 
   const getPageTitle = () => pageTitles[location.pathname] || "Página não encontrada";
 
+  // Atualiza data e imagem do usuário
   useEffect(() => {
     const today = new Date();
-    const options: Intl.DateTimeFormatOptions = {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    };
-    setCurrentDate(today.toLocaleDateString("pt-BR", options));
+    setCurrentDate(
+      today.toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" })
+    );
 
     const savedImage = localStorage.getItem("userImage");
     if (savedImage) setUserImage(savedImage);
   }, []);
 
+  // Upload de avatar
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const imageUrl = reader.result as string;
-        setUserImage(imageUrl);
-        localStorage.setItem("userImage", imageUrl);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const imageUrl = reader.result as string;
+      setUserImage(imageUrl);
+      localStorage.setItem("userImage", imageUrl);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  // Fallback de imagem
+  const handleImageError = () => {
+    if (!imageError) {
+      setImageError(true);
+      setUserImage("/assets/default-avatar.svg");
     }
   };
 
@@ -62,9 +68,10 @@ const Header = () => {
         <div className="user-info">
           <div className="user-avatar-container">
             <img
-              src={userImage || "/assets/default-avatar.jpg"}
-              alt="Imagem do usuário"
+              src={userImage || "/assets/default-avatar.svg"}
+              alt="Avatar do usuário"
               className="user-avatar"
+              onError={handleImageError}
             />
             <input
               type="file"
@@ -78,14 +85,8 @@ const Header = () => {
             </label>
           </div>
           <div className="headerUserInfo">
-            {loading ? (
-              <p>Carregando usuário...</p>
-            ) : (
-              <>
-                <p className="user-name">{nome || "Nome não disponível"}</p>
-                <p className="user-role">{cargo || "Cargo não disponível"}</p>
-              </>
-            )}
+            <p className="user-name">{nome || "Nome indisponível"}</p>
+            <p className="user-role">{cargo || "Cargo indisponível"}</p>
           </div>
         </div>
       </div>
