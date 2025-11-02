@@ -1,7 +1,6 @@
-/* dashboard-page.css */
 .dashboard-page {
   padding: 24px;
-  background-color: var(--color-bg); /* Cor de fundo da página */
+  background-color: var(--color-bg);
   display: flex;
   height: 83vh;
 }

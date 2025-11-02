@@ -7,11 +7,6 @@
   position: relative;
 }
 
-.crud-title {
-  margin-bottom: 16px;
-  font-weight: 600;
-}
-
 .crud-loader {
   display: flex;
   justify-content: center;
@@ -22,30 +17,28 @@
 .search-field {
   width: 100%;
   margin-bottom: 20px;
+  background-color: var(--input);
 }
 
 .crud-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: var(--card-bg);
-  border-radius: var(--card-radius);
+  background-color: var(--table-bg);
   overflow: hidden;
-  box-shadow: 0 2px 8px var(--card-shadow);
 }
 
 .crud-table th,
 .crud-table td {
   padding: 12px 16px;
-  border-bottom: 1px solid var(--color-border);
 }
 
 .crud-table th {
-  background-color: var(--card-bg);
+  background-color: var(--table-bg);
   font-weight: 600;
 }
 
 .crud-table tr:hover {
-  background-color: var(--card-hover);
+  background-color: var(--table-hover);
 }
 
 .action-button {

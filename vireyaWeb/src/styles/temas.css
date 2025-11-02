@@ -1,35 +1,33 @@
 :root {
-  /* Core colors */
   --color-bg: #f9f9f9;
   --color-text: #333;
   --color-primary: #4caf50;
   --color-border: #ddd;
 
-  /* Sidebar */
   --sidebar-bg: var(--color-bg);
   --sidebar-text: #00796b;
   --sidebar-hover: #b2dfdb;
   --sidebar-logout: #00796b;
   --sidebar-logout-hover: #b2dfdb;
 
-  /* Tasks */
   --task-bg: #ffffff;
   --task-text: #333;
   --task-hover: #f0f0f0;
   --task-button-hover: #00cc00;
 
-  /* Modals */
   --modal-bg: #ffffff;
   --modal-button-bg: #00ff00;
 
-  /* Chatbot */
   --chatbot-user-bg: #00695c;
   --chatbot-bot-bg: #aaaaaa;
   --chatbot-text: #fff;
 
-  /* Dashboard */
   --tab-active: #0e6b65;
   --tab-inactive: #555;
+
+  --table-bg: #eeee;
+  --table-hover: #ffff;
+
   --card-bg: #ffffff;
   --card-shadow: rgba(0, 0, 0, 0.1);
   --card-hover: #f0f0f0;
@@ -70,6 +68,9 @@
   --card-bg: #121212;
   --card-shadow: rgba(255, 255, 255, 0.1);
   --card-hover: #444444;
+
+  --table-bg: #4444;
+  --table-hover: #6666;
 
   --line-color: #444;
 
