@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -36,6 +36,7 @@ type CrudPageProps<T extends { id: number }> = {
   refetch?: () => Promise<void>;
   modal: Partial<Record<keyof T, FieldSchema>>;
   displayFields?: Record<string, string>;
+  relationFields?: (keyof T)[];
 };
 
 export default function CrudPage<T extends { id: number }>({
@@ -49,6 +50,7 @@ export default function CrudPage<T extends { id: number }>({
   refetch,
   modal,
   displayFields,
+  relationFields,
 }: CrudPageProps<T>) {
   const [modalOpen, setModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<T | null>(null);
@@ -64,7 +66,7 @@ export default function CrudPage<T extends { id: number }>({
     setEditingItem(null);
   }, []);
 
-  const { form, formErrors, handleSubmit, handleChange } = useCrudForm({
+  const { form, formErrors, handleSubmit, handleChange, setForm } = useCrudForm({
     item: editingItem,
     onSave: async (formData) => {
       if (editingItem)
@@ -75,6 +77,29 @@ export default function CrudPage<T extends { id: number }>({
     },
     onCancel: closeModal,
   });
+
+  useEffect(() => {
+    if (editingItem) {
+      const formData = Object.fromEntries(
+        Object.entries(editingItem).map(([k, v]) => {
+          if (v && typeof v === "object" && "id" in v) {
+            return [k, (v as { id: number }).id];
+          }
+
+          if (relationFields?.includes(k as keyof T)) {
+            return [k, v ?? ""];
+          }
+
+          return [k, v ?? ""];
+        })
+      ) as Partial<T>;
+
+      setForm(formData);
+    } else {
+      setForm({} as Partial<T>);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [editingItem, setForm]);
 
   const filteredItems = useMemo(() => {
     const query = searchQuery.toLowerCase();
@@ -199,8 +224,10 @@ export default function CrudPage<T extends { id: number }>({
                     <FormControl fullWidth margin="normal" key={key}>
                       <InputLabel>{label}</InputLabel>
                       <Select
-                        value={String(value)}
-                        onChange={(e) => handleChange(fieldKey, e.target.value)}
+                        value={value === null ? "" : String(value)}
+                        onChange={(e) =>
+                          handleChange(fieldKey, Number(e.target.value))
+                        }
                         error={!!formErrors[fieldKey]}
                       >
                         {options?.map(

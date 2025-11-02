@@ -7,10 +7,29 @@ import { CircularProgress } from "@mui/material";
 import { listarPrioridades } from "../../services/PrioridadeService";
 
 const AvisoPage: React.FC = () => {
-  const { items: avisos, criar, atualizar, deletar, loading, refetch } = useCrudEntity<Aviso>(AvisoService);
-  const prioridades = useDropdown(listarPrioridades);
+  const {
+    items: avisos,
+    criar,
+    atualizar,
+    deletar,
+    loading,
+    refetch,
+  } = useCrudEntity<Aviso>(AvisoService);
 
-  if (!avisos || !prioridades) return <CircularProgress />;
+  const prioridadesRaw = useDropdown(listarPrioridades);
+  const prioridades = prioridadesRaw.map((p) => ({ id: p.id, nome: p.nivel }));
+
+  const criarAviso = async (data: Omit<Aviso, "id">) => {
+    const idEta = localStorage.getItem("idEta");
+    if (!idEta) {
+      throw new Error("ID da ETA não encontrado no armazenamento local.");
+    }
+
+    const avisoComEta = { ...data, idEta };
+    await criar(avisoComEta);
+  };
+
+  if (loading) return <CircularProgress />;
 
   const modalConfig = {
     descricao: { label: "Descrição", type: "string" },
@@ -27,7 +46,7 @@ const AvisoPage: React.FC = () => {
     <CrudPage<Aviso>
       title="Avisos Diários"
       items={avisos}
-      criar={criar}
+      criar={criarAviso}
       atualizar={atualizar}
       deletar={deletar}
       refetch={refetch}

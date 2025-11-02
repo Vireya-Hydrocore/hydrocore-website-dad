@@ -54,6 +54,7 @@ const ProdutoPage: React.FC = () => {
           tipo: "Tipo",
           unidadeMedida: "Unidade de Medida",
         }}
+        relationFields={["idUnidadeMedida"]}
       />
     </div>
   );

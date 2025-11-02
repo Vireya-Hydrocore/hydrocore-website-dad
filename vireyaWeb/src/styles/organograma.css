@@ -1,4 +1,3 @@
-/* Container geral */
 .organogramaContainer {
   display: flex;
   flex-direction: column;
@@ -10,7 +9,6 @@
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Cada nó (nível hierárquico) */
 .node {
   display: flex;
   flex-direction: column;
@@ -18,7 +16,6 @@
   position: relative;
 }
 
-/* Subordinados (filhos) */
 .children {
   display: flex;
   justify-content: center;
@@ -28,7 +25,6 @@
   position: relative;
 }
 
-/* Linha vertical conectando supervisor aos subordinados */
 .children::before {
   content: "";
   position: absolute;
@@ -40,7 +36,6 @@
   transform: translateX(-50%);
 }
 
-/* Linha horizontal conectando os subordinados entre si */
 .children::after {
   content: "";
   position: absolute;
@@ -52,7 +47,6 @@
   z-index: 0;
 }
 
-/* Linha vertical para cada filho */
 .children > .node::before {
   content: "";
   position: absolute;
@@ -63,7 +57,6 @@
   background-color: var(--line-color);
 }
 
-/* Card base */
 .card {
   position: relative;
   background: var(--card-bg);
@@ -82,14 +75,12 @@
   box-shadow: var(--card-hover-shadow);
 }
 
-/* Card de destaque (nível mais alto) */
 .card.destaque {
   background: var(--primary-color);
   color: var(--card-text-destaque);
   border-color: transparent;
 }
 
-/* Texto dentro do card */
 .cardText .name {
   display: block;
   font-weight: 700;
@@ -108,7 +99,6 @@
   color: var(--card-text-destaque-secondary);
 }
 
-/* Animação de fade-in */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -124,7 +114,6 @@
   animation: fadeIn 0.4s ease-in-out;
 }
 
-/* Responsividade */
 @media (max-width: 800px) {
   .children {
     flex-direction: column;
