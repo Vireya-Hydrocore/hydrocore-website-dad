@@ -2,8 +2,6 @@ import "../styles/chatbot.css";
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 
-// api_key 
-
 function ChatBotPage() {
   const [messages, setMessages] = useState([
     { sender: "bot", text: "Olá! Como posso ajudar você hoje?" },
@@ -32,12 +30,39 @@ function ChatBotPage() {
 
       const response = await axios.post(
         urlWithEmail,
-        { user_message: userMessage },
+        {
+          user_message: userMessage,
+          api_key: "AIzaSyAhoX7plj8zHPcvZn7DCgeUibU212CsGCI",
+        },
         {
           headers: { Authorization: `Bearer ${senha}` },
         }
       );
-      const botReply = response.data.resposta || "Resposta não disponível.";
+
+      let botReply;
+
+      try {
+        const resposta = response.data?.resposta;
+
+        if (!resposta) {
+          botReply = "A resposta veio vazia da API.";
+        } else if (typeof resposta === "string") {
+          botReply = resposta;
+        } else if (typeof resposta === "object") {
+          botReply =
+            resposta.output ||
+            resposta.text ||
+            resposta.content ||
+            JSON.stringify(resposta, null, 2) ||
+            "Sem resposta disponível.";
+        } else {
+          botReply = String(resposta);
+        }
+      } catch (err) {
+        console.error("Erro ao interpretar a resposta da API:", err);
+        botReply = "Erro ao processar a resposta do servidor.";
+      }
+
       setMessages((prev) => [...prev, { sender: "bot", text: botReply }]);
     } catch (error) {
       console.error("Erro ao enviar a requisição:", error);
@@ -63,7 +88,9 @@ function ChatBotPage() {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`chatbot-message ${msg.sender === "user" ? "chatbot-user" : "chatbot-bot"}`}
+            className={`chatbot-message ${
+              msg.sender === "user" ? "chatbot-user" : "chatbot-bot"
+            }`}
           >
             {msg.text}
           </div>
