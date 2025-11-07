@@ -54,9 +54,9 @@ const TarefaPage: React.FC = () => {
       ...data,
       dataCriacao: new Date().toISOString(),
       dataConclusao: null,
-      // transformar id do dropdown em nivel (string) antes de enviar
       prioridade:
-        prioridadesRaw.find((p) => p.id === data.prioridade)?.nivel || "",
+        prioridadesRaw.find((p) => p.id === Number(data.prioridade))?.nome ||
+        "",
     };
     await criar(tarefaComData);
   };

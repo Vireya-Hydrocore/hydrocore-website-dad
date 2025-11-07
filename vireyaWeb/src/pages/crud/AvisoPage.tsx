@@ -20,7 +20,7 @@ const AvisoPage: React.FC = () => {
   const prioridades = prioridadesRaw.map((p) => ({ id: p.id, nome: p.nivel }));
 
   const criarAviso = async (data: Omit<Aviso, "id">) => {
-    const idEta = localStorage.getItem("idEta");
+    const idEta = Number(localStorage.getItem("idEta"));
     if (!idEta) {
       throw new Error("ID da ETA não encontrado no armazenamento local.");
     }
